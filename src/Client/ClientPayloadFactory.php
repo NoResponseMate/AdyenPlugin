@@ -122,7 +122,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
         $payload = $this->add3DSecureFlags($receivedPayload, $payload);
 
         $payload = $this->filterArray($receivedPayload, [
-            'browserInfo', 'paymentMethod', 'clientStateDataIndicator', 'riskData',
+            'browserInfo', 'paymentMethod', 'clientStateDataIndicator', 'dateOfBirth', 'telephoneNumber', 'riskData',
         ]) + $payload;
 
         $payload = $this->injectShopperReference($payload, $shopperReference);

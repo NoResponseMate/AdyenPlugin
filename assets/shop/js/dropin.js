@@ -219,6 +219,13 @@
                 facilypay_6x: oneyConfiguration,
                 facilypay_10x: oneyConfiguration,
                 facilypay_12x: oneyConfiguration,
+                ratepay: {
+                    visibility: {
+                        personalDetails: 'editable',
+                        billingAddress: 'hidden',
+                        deliveryAddress: 'hidden',
+                    }
+                }
             },
             showRemovePaymentMethodButton: true,
             onDisableStoredPaymentMethod: disableStoredPaymentMethodHandler
