@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Sylius\AdyenPlugin\Controller\Shop;
 
+use Ramsey\Uuid\Uuid;
 use Sylius\AdyenPlugin\Callback\PreserveOrderTokenUponRedirectionCallback;
 use Sylius\AdyenPlugin\Provider\PaymentMethodsProviderInterface;
 use Sylius\AdyenPlugin\Repository\ShopperReferenceRepositoryInterface;
+use Sylius\Component\Core\Factory\AddressFactoryInterface;
 use Sylius\Component\Core\Model\AddressInterface;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
@@ -72,7 +74,7 @@ class DropinConfigurationAction
         /** @var CustomerInterface $customer */
         $customer = $order->getCustomer();
 
-        return new JsonResponse([
+        $responseData = [
             'billingAddress' => [
                 'firstName' => $billingAddress->getFirstName(),
                 'lastName' => $billingAddress->getLastName(),
@@ -99,7 +101,11 @@ class DropinConfigurationAction
                 ),
             ],
             'translations' => $this->getTranslations(),
-        ]);
+        ];
+
+        $responseData = $this->addRatepayData($config, $order, $responseData);
+
+        return new JsonResponse($responseData);
     }
 
     private function getTranslations(): array
@@ -156,5 +162,22 @@ class DropinConfigurationAction
                 'tokenValue' => $tokenValue,
             ]),
         ]);
+    }
+
+    private function addRatepayData(array $config, OrderInterface $order, array $responseData): array
+    {
+        if (isset($config['ratepaySnippetId']) && '' !== trim((string) $config['ratepaySnippetId'])) {
+            $customer = $order->getCustomer();
+            $buyerId = $customer ? $customer->getId() : 'guest';
+
+            $responseData['ratepay'] = [
+                'snippetId' => $config['ratepaySnippetId'],
+                'dfpSessionId' => Uuid::uuid4()->toString(),
+            ];
+            $responseData['checkoutId'] = md5($order->getTokenValue() . $order->getTotal() . $order->getCurrencyCode());
+            $responseData['buyerId'] = $buyerId;
+        }
+
+        return $responseData;
     }
 }

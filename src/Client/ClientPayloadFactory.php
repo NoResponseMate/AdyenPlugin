@@ -122,7 +122,7 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
         $payload = $this->add3DSecureFlags($receivedPayload, $payload);
 
         $payload = $this->filterArray($receivedPayload, [
-            'browserInfo', 'paymentMethod', 'clientStateDataIndicator', 'dateOfBirth', 'telephoneNumber', 'riskData',
+            'browserInfo', 'paymentMethod', 'clientStateDataIndicator', 'deviceFingerprint', 'dateOfBirth', 'telephoneNumber', 'riskData',
         ]) + $payload;
 
         $payload = $this->injectShopperReference($payload, $shopperReference);
@@ -422,5 +422,15 @@ final class ClientPayloadFactory implements ClientPayloadFactoryInterface
         ]);
 
         return $payload;
+    }
+
+    private function isRatepayPayment(array $payload): bool
+    {
+        if (!isset($payload['paymentMethod']['type'])) {
+            return false;
+        }
+
+        $ratepayTypes = ['ratepay', 'ratepay_directdebit'];
+        return in_array($payload['paymentMethod']['type'], $ratepayTypes, true);
     }
 }

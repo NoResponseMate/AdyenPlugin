@@ -143,6 +143,11 @@ final class ConfigurationType extends AbstractType
                 ],
                 'required' => false,
             ])
+            ->add('ratepaySnippetId', TextType::class, [
+                'label' => 'sylius_adyen.ui.ratepay_snippet_id',
+                'help' => 'sylius_adyen.ui.ratepay_snippet_id_help',
+                'required' => false,
+            ])
         ;
     }
 

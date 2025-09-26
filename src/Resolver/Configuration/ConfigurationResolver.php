@@ -35,6 +35,7 @@ class ConfigurationResolver
             'esdType' => 'level3',
             'merchantCategoryCode' => '',
             'captureMode' => '',
+            'ratepaySnippetId' => null,
         ]);
         $resolver->setRequired($resolver->getDefinedOptions());
 

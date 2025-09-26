@@ -51,6 +51,8 @@ sylius_adyen:
         payment_failed: Payment failed, try again
         payment_processing: Payment is being processed, please watch the notifications on your e-mail
         platform: Platform
+        ratepay_snippet_id: Ratepay Snippet ID
+        ratepay_snippet_id_help: Your Ratepay Snippet ID for device fingerprinting (required for Ratepay payments)
         resend_payment_link: Resend payment link
         send_payment_link: Send payment link
         test_platform: Test platform
